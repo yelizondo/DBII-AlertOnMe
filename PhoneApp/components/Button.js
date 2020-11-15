@@ -6,6 +6,7 @@ export default function Button(props){
         <View style={styles.view}>
             <TouchableOpacity
                 onPress={props.action}
+                style={styles.button}
             >
                 <Text style={styles.text}> {props.text} </Text>
             </TouchableOpacity>
@@ -15,12 +16,13 @@ export default function Button(props){
 
 const styles = StyleSheet.create({
     view: {
-        alignItems: "center",
-        backgroundColor: "#30334d",
         width: '25%',
+        height:10,
         flex: 2,
-        alignItems: 'center',
         justifyContent: 'center'
+    },
+    button: {
+        backgroundColor: "#30334d"
     },
     text: {
         color: 'white',

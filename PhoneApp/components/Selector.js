@@ -12,7 +12,6 @@ export default function Selector(props) {
                 {props.prompt}
             </Text>
             <Picker
-                style={styles.picker}
                 selectedValue= {selectedTime}
                 onValueChange={onSelect}
             >
@@ -27,10 +26,6 @@ export default function Selector(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-    picker: {
-        width: '80%',
-        height: '20%'
     },
     text: {
         fontSize: 18,
