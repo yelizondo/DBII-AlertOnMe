@@ -7,10 +7,6 @@ import Selector from './components/Selector';
 import Input from './components/Input';
 
 export default function App() {
-  const [id, getId] = useState('');
-  const onPress = () => getId(prevCount => uuid.v4() );
-  const [selectedTime, setSelectedTime] = useState("5");
-  const onSelect = (itemValue, itemIndex) => setSelectedTime(itemValue);
   const beginTracking = () => {console.log("Aquí empieza a seguir")};
 
   return (
