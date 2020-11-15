@@ -17,12 +17,12 @@ export default function Button(props){
 const styles = StyleSheet.create({
     view: {
         width: '25%',
-        height:10,
         flex: 2,
         justifyContent: 'center'
     },
     button: {
-        backgroundColor: "#30334d"
+        backgroundColor: "#30334d",
+        padding: "15%"
     },
     text: {
         color: 'white',
