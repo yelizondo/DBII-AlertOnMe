@@ -1,54 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Header from './components/Header'
+import Button from './components/Button'
+import Selector from './components/Selector';
 
 export default function App() {
-  // const [count, setCount] = useState(0);
   const [id, getId] = useState('');
-  // const onPress = () => setCount(prevCount => {
-  //   console.log("sirve");
-  //   return prevCount + 1;
-  // });
   const onPress = () => getId(prevCount => uuid.v4() );
+  const [selectedTime, setSelectedTime] = useState("");
+  const onSelect = (itemValue, itemIndex) => {
+    if (itemValue!="0") return setSelectedTime(itemValue);
+  };
+  const beginTracking = () => {console.log("Aquí empieza a seguir")};
 
   return (
-    <View style={styles.container}>
-      <View style={styles.countContainer}>
-        <Text style = {{fontSize: 50, color: 'white'}} >Alert On Me!</Text> 
-        <Text style={styles.text}>Camine tranquilo papillo</Text>
-        <Text style={styles.text}>ID: {id}</Text>
-        {/* <Text style={styles.text}>Count: {count}</Text> */}
-      </View> 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onPress}
-      >
-        <Text style={styles.text}>Follow me</Text>
-      </TouchableOpacity>
-    </View>
+  <View style={styles.container}>
+    <Header title='Alert On Me!' />
+    <Selector prompt='For how long will you like to be tracked?'/>
+    <Button text='Watch over me' action = {beginTracking} />
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 100,
-    backgroundColor: '#2d3deb'
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#30334d",
-    padding: 10
-  },
-  countContainer: {
-    alignItems: "center",
-    padding: 10
-  },
-  text: {
-    fontSize: 30,
-    color: 'white'
+    backgroundColor: '#f0f0f5',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
