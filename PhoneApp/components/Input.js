@@ -2,18 +2,26 @@ import React, { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 export default function Input(props) {
-    const [text, setText] = useState('');
-    const onChange = text=> setText(text);
+    const [text, setText] = useState();
+    const onChange = pText => {
+        if (pinValidator.test(pText)) {
+            props.changer(pText);
+            setText(pText)};
+        }
     return(
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
-                placeholder={props.text}
-                onChange={onChange}
+                placeholder={props.placeholder}
+                onChangeText={onChange}
+                value = {text}
+                secureTextEntry={true}
             />
         </View>
     );
 };
+
+const pinValidator = /^[0-9]{0,3}$/;
 
 const styles = StyleSheet.create({
     container: {

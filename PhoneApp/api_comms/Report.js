@@ -9,6 +9,6 @@ const config = {
 }
 
 
-export default function Report(){
+export default function Report(uuid, lat, long, canton){
     return axios(config);
 }
