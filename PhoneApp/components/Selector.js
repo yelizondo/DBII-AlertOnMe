@@ -4,7 +4,10 @@ import { Picker } from '@react-native-picker/picker';
 
 export default function Selector(props) {
     const [selectedTime, setSelectedTime] = useState("5");
-    const onSelect = (itemValue, itemIndex) => setSelectedTime(itemValue);
+    const onSelect = (itemValue, itemIndex) => {
+        props.action(parseInt(itemValue));
+        setSelectedTime(itemValue);
+    };
 
     return(
         <View>
