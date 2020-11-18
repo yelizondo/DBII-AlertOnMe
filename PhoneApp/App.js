@@ -40,7 +40,7 @@ export default function App() {
   const beginTracking = () => {
     session.uuid = uuid.v4();
     console.log(session)
-    console.log(Locate());
+    // console.log(Locate());
   };
   
   return (
