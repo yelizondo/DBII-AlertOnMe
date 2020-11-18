@@ -5,6 +5,8 @@ import Header from './components/Header'
 import Button from './components/Button'
 import Selector from './components/Selector';
 import Input from './components/Input';
+import getCanton from './api_comms/Locate'
+import sendReport from './api_comms/Report'
 
 export default function App() {
   const [session, updateSession] = useState({
@@ -17,7 +19,7 @@ export default function App() {
 
   const setPin = pPin =>{
     console.log(pPin);
-    // session.pin = param
+
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -42,8 +44,17 @@ export default function App() {
   // esta función del tracking podría tener el loop 
   // para mandar la info al backend
   const beginTracking = () => {
-    session.uuid = uuid.v4();
-    console.log(session)
+    let lat = "9.949556"
+    let long = "-84.046887"
+    getCanton(lat, long)
+    .then(res => {
+      let canton = res.data.results[0].address_components[0].long_name
+      //console.log(canton)
+      session.uuid = uuid.v4(),
+      console.log(session)
+
+      sendReport(session.uuid, lat, long, canton)
+    })
   };
   
   return (
