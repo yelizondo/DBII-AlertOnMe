@@ -1,5 +1,5 @@
 import * as express from 'express';
- import { LocationController } from '../controllers/location';
+import { LocationController } from '../controllers/location';
 
 const app = express();
 
@@ -16,6 +16,14 @@ app.post('/', (req, res, next) => {
                 message: err
             });
         });
+});
+
+app.get('/', (req, res, next) => {
+    LocationController.getInstance()
+    .setVizForDB();
+    res.status(200).json({
+        message: "all ok"
+    });
 });
 
 export { app as locationrouter };

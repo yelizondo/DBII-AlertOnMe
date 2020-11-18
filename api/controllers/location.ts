@@ -1,5 +1,6 @@
 import { Logger } from "../common";
-import { Location } from "../models/location";
+import { Location, Intersection } from "../models";
+
 export class LocationController {
     private static instance: LocationController;
     private log: Logger;
@@ -14,15 +15,43 @@ export class LocationController {
             guid: pGUID,
             location: {
                 type: 'Point',
-                coordinates: [pLatitud, pLongitud]
+                coordinates: [pLongitud, pLatitud]
             },
             canton: pCanton,
-            latitude: pLatitud,
-            longitude: pLongitud,
             timestamp: date,
             dotw: date.getDay()
         });
         return newLocation.save();
+    }
+
+    public setVizForDB() {
+        Location.find().distinct('location', function (error, locations) {
+            locations.forEach(function(myDoc) {
+                const longitude = myDoc.coordinates[0];
+                const latitude = myDoc.coordinates[1];
+                const intersectionCount = Location.find({
+                    location: {
+                        $near : {
+                            $geometry: { type: "Point", coordinates: myDoc.coordinates},
+                            $minDistance: 0,
+                            $maxDistance: 10
+                        }
+                    }
+                }).count();
+                Intersection.update({ 
+                    longitude: longitude, 
+                    latitude: latitude
+                },
+                { 
+                    $set: {
+                        count: intersectionCount
+                    } 
+                },
+                {
+                    upsert: true
+                });
+            });
+        });
     }
 
     public static getInstance() : LocationController {
