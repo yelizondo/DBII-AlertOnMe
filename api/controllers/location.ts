@@ -24,7 +24,7 @@ export class LocationController {
         return newLocation.save();
     }
 
-    public setVizForDB() {
+    public setVisualizationForDB() {
         Location.find().distinct('location', function (error, locations) {
             locations.forEach(function(myDoc) {
                 const longitude = myDoc.coordinates[0];
@@ -52,6 +52,13 @@ export class LocationController {
                 });
             });
         });
+    }
+
+    public getVisualizationInfo() {
+        return Intersection.aggregate([
+            { $sort: { count: -1}},
+            { $limit: 5}
+        ])
     }
 
     public static getInstance() : LocationController {
