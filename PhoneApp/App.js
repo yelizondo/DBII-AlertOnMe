@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Button from './components/Button'
 import Selector from './components/Selector';
 import Input from './components/Input';
+import Pinpoint from './api_comms/Pinpoint'
 import * as Location from 'expo-location';
 
 export default function App() {
@@ -13,7 +14,7 @@ export default function App() {
     Location.getPermissionsAsync()
     .then(status=>{
       if (!status.granted){
-        Location.requestPermissionsAsync()
+        Location.requestPermissionsAsync();
       }
     });
   }, []);
@@ -52,7 +53,21 @@ export default function App() {
   // function for Button
   const beginTracking = () => {
     session.uuid = uuid.v4();
-    console.log(session)
+    Pinpoint()
+    .then(({coords:{latitude, longitude}})=>{
+      console.log(latitude,longitude);
+      updateSession({
+        uuid: session.uuid,
+        latitude: latitude,
+        longitude: longitude,
+        pin: session.pin,
+        time: session.time
+      });
+    })
+    .then(()=>{
+      console.log(session);
+    })
+    
   };
   
   // app JSX
