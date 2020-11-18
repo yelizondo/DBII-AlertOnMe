@@ -13,18 +13,17 @@ const config = {
     method: 'get',
     url: 'https://maps.googleapis.com/maps/api/geocode/json?',
     params: {
-      latlng: '9.949556, -84.046887',   // Placeholder de la coordenada
       result_type: 'administrative_area_level_2',
       key: 'AIzaSyBqhDOPHmVkPUdpM83voYgUBm3lSWzd6_U'
     }
 }
 
-export default function getCanton(lat, long){
-  let latlong = lat + ", " + long
+export default function Locate(lat, long){
+    config.params.latlng = lat + "," + long;
 
-  config.params.latlng = latlong
-
-  return new Promise((resolve, reject) =>{
-    resolve(axios(config))
-  })
+    axios(config)
+    .then(res=>{
+        // console.log(res.data.results[0].address_components[0].long_name);
+        return res.data.results[0].address_components[0].long_name;
+    })
 }

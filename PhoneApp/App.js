@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
-import Header from './components/Header'
-import Button from './components/Button'
+import Header from './components/Header';
+import Button from './components/Button';
 import Selector from './components/Selector';
 import Input from './components/Input';
-import getCanton from './api_comms/Locate'
-import sendReport from './api_comms/Report'
-import Pinpoint from './api_comms/Pinpoint'
+import Report from './api_comms/Report';
+import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
+import Locate from './api_comms/Locate';
 
 export default function App() {
   // hook for ensuring having permission for location services
@@ -53,23 +53,12 @@ export default function App() {
   }
   
   // function for Button
+  // gets all of the pertinent data and prepares backend call (Report)
   const beginTracking = () => {
-    /*
-    getCanton(lat, long)
-    .then(res => {
-      let canton = res.data.results[0].address_components[0].long_name
-      //console.log(canton)
-      session.uuid = uuid.v4(),
-      console.log(session)
-
-      sendReport(session.uuid, lat, long, canton)
-    }) */
-    session.uuid = uuid.v4();
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
-      console.log(latitude,longitude);
       updateSession({
-        uuid: session.uuid,
+        uuid: uuid.v4(),
         latitude: latitude,
         longitude: longitude,
         pin: session.pin,
@@ -77,9 +66,8 @@ export default function App() {
       });
     })
     .then(()=>{
-      console.log(session);
-    })
-    
+      Report(session.uuid, session.latitude, session.longitude, Locate(session.latitude, session.longitude));
+    });
   };
   
   // app JSX

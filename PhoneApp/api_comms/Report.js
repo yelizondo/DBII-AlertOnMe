@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig }  from 'axios';
+import axios from 'axios';
+import Locate from './Locate'
 
 const config = {
     method: 'put',
@@ -9,10 +10,10 @@ const config = {
 }
 
 
-export default function sendReport(uuid, lat, long, canton){
+export default function Report(uuid, lat, long, canton){
     console.log(uuid)
     console.log(lat)
     console.log(long)
-    console.log(canton)
+    console.log(canton);
     //return axios(config);
 }
