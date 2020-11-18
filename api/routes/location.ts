@@ -3,7 +3,7 @@ import { LocationController } from '../controllers/location';
 
 const app = express();
 
-app.get('/', (req, res, next) => {
+app.post('/', (req, res, next) => {
     LocationController.getInstance()
     .insertLocation(req.query.guid as string, Number(req.query.latitude), Number(req.query.longitude), req.query.canton as string)
     .then(msg => {

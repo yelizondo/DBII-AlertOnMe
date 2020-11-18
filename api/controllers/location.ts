@@ -26,26 +26,26 @@ export class LocationController {
 
     public setVisualizationForDB() {
         return Location.find().distinct('location', (error, locations) => {
-            locations.forEach((myDoc) => { console.log(1);
+            locations.forEach((myDoc) => {
                 const longitude = myDoc.coordinates[0];
                 const latitude = myDoc.coordinates[1];
-                const intersectionCount = Location.find({
+                Location.find({
                     location: {
                         $near : {
-                            $geometry: { type: "Point", coordinates: myDoc.coordinates},
-                            $minDistance: 0,
+                            $geometry: { type: "Point", coordinates: myDoc.coordinates },
+                            $minDistance: 0.1,
                             $maxDistance: 10
                         }
                     }
-                }).count();
-                Intersection.update({ longitude, latitude },
-                {
-                    $set: {
-                        count: intersectionCount
-                    }
-                },
-                {
-                    upsert: true
+                }).countDocuments({}, (err, count) => {
+                    console.log(err);
+                    Intersection.update({ longitude, latitude },
+                    {
+                        $set: { count }
+                    },
+                    {
+                        upsert: true
+                    });
                 });
             });
         });
