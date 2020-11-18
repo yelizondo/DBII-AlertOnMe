@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, componentDidMount } from 'react';
 import { StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import Header from './components/Header'
 import Button from './components/Button'
 import Selector from './components/Selector';
 import Input from './components/Input';
+import * as Location from 'expo-location';
 
 export default function App() {
   const [session, updateSession] = useState({
@@ -42,13 +43,30 @@ export default function App() {
     console.log(session)
     // console.log(Locate());
   };
+
+  const test = () => {
+    // Geolocation.getCurrentPosition(
+    //   position => console.log(position),
+    //   error => console.log(error),
+    //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    // );
+    Location.requestPermissionsAsync()
+    .then(status => {
+      if(status.granted){
+        Location.getCurrentPositionAsync({})
+        .then(location => {
+          console.log(location);
+        });
+      }
+    });
+  }
   
   return (
   <View style={styles.container}>
     <Header title='Alert On Me!' />
     <Selector prompt='For how long will you like to be tracked?' action={setTime}/>
     <Input placeholder="Insert a 3 digit pin" changer={setPin}/>
-    <Button text='Track me' action = {beginTracking} />
+    <Button text='Track me' action = {test} />
   </View>
   );
 };
