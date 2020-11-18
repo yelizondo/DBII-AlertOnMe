@@ -4,10 +4,18 @@ const { Schema } = mongoose;
 
 const locationSchema = new Schema({
     guid: String,
-    latitude: String,
-    longitude: String,
+    location: {
+        type: {
+            type: String,
+            enum: ['Point']
+        },
+        coordinates: {
+            type: [Number]
+        }
+    },
     canton: String,
-    timestamp: Date
+    timestamp: Date,
+    dotw: Number
 });
 
 export const Location = mongoose.model('location', locationSchema);

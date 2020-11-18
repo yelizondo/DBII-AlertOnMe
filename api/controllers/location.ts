@@ -1,43 +1,33 @@
 import { Logger } from "../common";
-import { ArticleMSSQLController, ArticleMongoController } from "../database/articles";
-import { IArticle, IMedia, IArticleMedia, IHashtag, ISubtitle } from "../database/articles";
-
-
-
-export class ArticlesController {
-    private static instance: ArticlesController;
+import { Location } from "../models/location";
+export class LocationController {
+    private static instance: LocationController;
     private log: Logger;
 
     private constructor() {
         this.log = new Logger();
     }
 
-    // public insertLocation(pGUUID, pLatitud, pLongitud, pCanton) {
-
-    // }
-
-    public getArticles(pHashtags: string[]) : any {
-
-        return Promise.all([
-            ArticleMSSQLController.getInstance().getArticles(pHashtags),
-            ArticleMongoController.getInstance().getArticles(pHashtags)
-        ])
-        .then((articles) => {
-            const result = (articles[0] as object[]).concat((articles[1]) as object[]);
-            return new Promise((resolve, reject) => {
-                resolve(result as IArticle[]);
-            });
-        })
-        .catch(error => {
-            return new Promise((resolve, reject) => {
-                reject(error);
-            });
+    public insertLocation(pGUID:string, pLatitud:number, pLongitud:number, pCanton:string) {
+        const date = new Date();
+        const newLocation = new Location({
+            guid: pGUID,
+            location: {
+                type: 'Point',
+                coordinates: [pLatitud, pLongitud]
+            },
+            canton: pCanton,
+            latitude: pLatitud,
+            longitude: pLongitud,
+            timestamp: date,
+            dotw: date.getDay()
         });
+        return newLocation.save();
     }
 
-    public static getInstance() : ArticlesController {
+    public static getInstance() : LocationController {
         if (!this.instance) {
-            this.instance = new ArticlesController();
+            this.instance = new LocationController();
         }
         return this.instance;
     }
