@@ -25,8 +25,8 @@ export class LocationController {
     }
 
     public setVisualizationForDB() {
-        Location.find().distinct('location', function (error, locations) {
-            locations.forEach(function(myDoc) {
+        return Location.find().distinct('location', (error, locations) => {
+            locations.forEach((myDoc) => { console.log(1);
                 const longitude = myDoc.coordinates[0];
                 const latitude = myDoc.coordinates[1];
                 const intersectionCount = Location.find({
@@ -38,14 +38,11 @@ export class LocationController {
                         }
                     }
                 }).count();
-                Intersection.update({ 
-                    longitude: longitude, 
-                    latitude: latitude
-                },
-                { 
+                Intersection.update({ longitude, latitude },
+                {
                     $set: {
                         count: intersectionCount
-                    } 
+                    }
                 },
                 {
                     upsert: true
@@ -54,10 +51,10 @@ export class LocationController {
         });
     }
 
-    public getVisualizationInfo() {
+    public getVisualizationInfo(pLimit:number) {
         return Intersection.aggregate([
             { $sort: { count: -1}},
-            { $limit: 5}
+            { $limit: pLimit}
         ])
     }
 

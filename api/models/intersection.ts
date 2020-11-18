@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const intersectionSchema = new Schema({
-    latitude: Number, 
-    longitude: Number, 
+    latitude: Number,
+    longitude: Number,
     count: Number
 });
 
