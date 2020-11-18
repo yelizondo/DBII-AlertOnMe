@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import Header from './components/Header'
@@ -7,8 +7,21 @@ import Selector from './components/Selector';
 import Input from './components/Input';
 import getCanton from './api_comms/Locate'
 import sendReport from './api_comms/Report'
+import Pinpoint from './api_comms/Pinpoint'
+import * as Location from 'expo-location';
 
 export default function App() {
+  // hook for ensuring having permission for location services
+  useEffect(()=>{
+    Location.getPermissionsAsync()
+    .then(status=>{
+      if (!status.granted){
+        Location.requestPermissionsAsync();
+      }
+    });
+  }, []);
+
+  // hook for adding state to the app
   const [session, updateSession] = useState({
     uuid: -1,
     latitude: -1,
@@ -17,9 +30,8 @@ export default function App() {
     time: 5
   });
 
+  // function for pin Input
   const setPin = pPin =>{
-    console.log(pPin);
-
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -29,9 +41,8 @@ export default function App() {
     })
   }
 
+  // function for time Selector
   const setTime = pTime =>{
-    console.log(pTime);
-    // session.pin = param
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -41,11 +52,9 @@ export default function App() {
     })
   }
   
-  // esta función del tracking podría tener el loop 
-  // para mandar la info al backend
+  // function for Button
   const beginTracking = () => {
-    let lat = "9.949556"
-    let long = "-84.046887"
+    /*
     getCanton(lat, long)
     .then(res => {
       let canton = res.data.results[0].address_components[0].long_name
@@ -54,9 +63,26 @@ export default function App() {
       console.log(session)
 
       sendReport(session.uuid, lat, long, canton)
+    }) */
+    session.uuid = uuid.v4();
+    Pinpoint()
+    .then(({coords:{latitude, longitude}})=>{
+      console.log(latitude,longitude);
+      updateSession({
+        uuid: session.uuid,
+        latitude: latitude,
+        longitude: longitude,
+        pin: session.pin,
+        time: session.time
+      });
     })
+    .then(()=>{
+      console.log(session);
+    })
+    
   };
   
+  // app JSX
   return (
   <View style={styles.container}>
     <Header title='Alert On Me!' />
@@ -67,6 +93,7 @@ export default function App() {
   );
 };
 
+// Style for app
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f0f0f5',

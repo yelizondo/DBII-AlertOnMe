@@ -5,15 +5,23 @@ export default function Input(props) {
     const [text, setText] = useState();
     const onChange = pText => {
         if (pinValidator.test(pText)) {
-            props.changer(pText);
-            setText(pText)};
-        }
+            setText(pText)
+        };
+    };
+
+    const onInput = pText => {
+        if (pinValidator.test(text)) {
+            props.changer(text);
+        };
+    };
+
     return(
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
                 placeholder={props.placeholder}
                 onChangeText={onChange}
+                onSubmitEditing={onInput}
                 value = {text}
                 secureTextEntry={true}
             />
