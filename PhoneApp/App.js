@@ -1,4 +1,4 @@
-import React, { useState, componentDidMount } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import Header from './components/Header'
@@ -8,6 +8,17 @@ import Input from './components/Input';
 import * as Location from 'expo-location';
 
 export default function App() {
+  // hook for ensuring having permission for location services
+  useEffect(()=>{
+    Location.getPermissionsAsync()
+    .then(status=>{
+      if (!status.granted){
+        Location.requestPermissionsAsync()
+      }
+    });
+  }, []);
+
+  // hook for adding state to the app
   const [session, updateSession] = useState({
     uuid: -1,
     latitude: -1,
@@ -16,6 +27,7 @@ export default function App() {
     time: 5
   });
 
+  // function for pin Input
   const setPin = pPin =>{
     updateSession({
       uuid: session.uuid,
@@ -26,6 +38,7 @@ export default function App() {
     })
   }
 
+  // function for time Selector
   const setTime = pTime =>{
     updateSession({
       uuid: session.uuid,
@@ -36,41 +49,24 @@ export default function App() {
     })
   }
   
-  // esta función del tracking podría tener el loop 
-  // para mandar la info al backend
+  // function for Button
   const beginTracking = () => {
     session.uuid = uuid.v4();
     console.log(session)
-    // console.log(Locate());
   };
-
-  const test = () => {
-    // Geolocation.getCurrentPosition(
-    //   position => console.log(position),
-    //   error => console.log(error),
-    //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    // );
-    Location.requestPermissionsAsync()
-    .then(status => {
-      if(status.granted){
-        Location.getCurrentPositionAsync({})
-        .then(location => {
-          console.log(location);
-        });
-      }
-    });
-  }
   
+  // app JSX
   return (
   <View style={styles.container}>
     <Header title='Alert On Me!' />
     <Selector prompt='For how long will you like to be tracked?' action={setTime}/>
     <Input placeholder="Insert a 3 digit pin" changer={setPin}/>
-    <Button text='Track me' action = {test} />
+    <Button text='Track me' action = {beginTracking} />
   </View>
   );
 };
 
+// Style for app
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f0f0f5',
