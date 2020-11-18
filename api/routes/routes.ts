@@ -1,8 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { Logger } from '../common';
-import { locationrouter } from './location'
-
+import { locationrouter } from './location';
 class Routes {
 
     public express: express.Application;
@@ -16,7 +15,6 @@ class Routes {
         this.routes();
     }
 
-    // Configure Express middleware.
     private middleware(): void {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
@@ -28,4 +26,3 @@ class Routes {
 }
 
 export default new Routes().express;
-

@@ -45,15 +45,15 @@ class App {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
 
-        // // Headers
-        // this.express.use((req, res, next) => {
-        //     res.setHeader('Access-Control-Allow-Origin','*');
-        //     res.setHeader('Access-Control-Allow-Headers',
-        //     'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        //     res.setHeader('Access-Control-Allow-Methods',
-        //     'GET, POST');
-        //     next();
-        //   });
+        // Headers
+        this.express.use((req, res, next) => {
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.setHeader('Access-Control-Allow-Headers',
+            'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+            res.setHeader('Access-Control-Allow-Methods',
+            'GET, POST');
+            next();
+          });
     }
 
     private routes(): void {
