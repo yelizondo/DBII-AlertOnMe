@@ -16,8 +16,6 @@ export default function App() {
   });
 
   const setPin = pPin =>{
-    console.log(pPin);
-    // session.pin = param
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -28,8 +26,6 @@ export default function App() {
   }
 
   const setTime = pTime =>{
-    console.log(pTime);
-    // session.pin = param
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -44,6 +40,7 @@ export default function App() {
   const beginTracking = () => {
     session.uuid = uuid.v4();
     console.log(session)
+    console.log(Locate());
   };
   
   return (
