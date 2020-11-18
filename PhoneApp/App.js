@@ -5,6 +5,8 @@ import Header from './components/Header'
 import Button from './components/Button'
 import Selector from './components/Selector';
 import Input from './components/Input';
+import getCanton from './api_comms/Locate'
+import sendReport from './api_comms/Report'
 import Pinpoint from './api_comms/Pinpoint'
 import * as Location from 'expo-location';
 
@@ -52,6 +54,16 @@ export default function App() {
   
   // function for Button
   const beginTracking = () => {
+    /*
+    getCanton(lat, long)
+    .then(res => {
+      let canton = res.data.results[0].address_components[0].long_name
+      //console.log(canton)
+      session.uuid = uuid.v4(),
+      console.log(session)
+
+      sendReport(session.uuid, lat, long, canton)
+    }) */
     session.uuid = uuid.v4();
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
