@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import Header from './components/Header'
 import Button from './components/Button'
 import Selector from './components/Selector';
 import Input from './components/Input';
+import Pinpoint from './api_comms/Pinpoint'
+import * as Location from 'expo-location';
 
 export default function App() {
+  // hook for ensuring having permission for location services
+  useEffect(()=>{
+    Location.getPermissionsAsync()
+    .then(status=>{
+      if (!status.granted){
+        Location.requestPermissionsAsync();
+      }
+    });
+  }, []);
+
+  // hook for adding state to the app
   const [session, updateSession] = useState({
     uuid: -1,
     latitude: -1,
@@ -15,9 +28,8 @@ export default function App() {
     time: 5
   });
 
+  // function for pin Input
   const setPin = pPin =>{
-    console.log(pPin);
-    // session.pin = param
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -27,9 +39,8 @@ export default function App() {
     })
   }
 
+  // function for time Selector
   const setTime = pTime =>{
-    console.log(pTime);
-    // session.pin = param
     updateSession({
       uuid: session.uuid,
       latitude: session.latitude,
@@ -39,13 +50,27 @@ export default function App() {
     })
   }
   
-  // esta función del tracking podría tener el loop 
-  // para mandar la info al backend
+  // function for Button
   const beginTracking = () => {
     session.uuid = uuid.v4();
-    console.log(session)
+    Pinpoint()
+    .then(({coords:{latitude, longitude}})=>{
+      console.log(latitude,longitude);
+      updateSession({
+        uuid: session.uuid,
+        latitude: latitude,
+        longitude: longitude,
+        pin: session.pin,
+        time: session.time
+      });
+    })
+    .then(()=>{
+      console.log(session);
+    })
+    
   };
   
+  // app JSX
   return (
   <View style={styles.container}>
     <Header title='Alert On Me!' />
@@ -56,6 +81,7 @@ export default function App() {
   );
 };
 
+// Style for app
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f0f0f5',

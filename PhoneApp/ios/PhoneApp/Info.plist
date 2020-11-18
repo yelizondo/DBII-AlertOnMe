@@ -55,5 +55,9 @@
 	<false/>
   <key>UIStatusBarStyle</key>
   <string>UIStatusBarStyleDefault</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>pa stalkearlo</string>
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>pa stalkearlo2</string>
 </dict>
 </plist>
