@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { Logger } from '../common';
-import { testrouter } from './test'
+import { locationrouter } from './location'
 
 class Routes {
 
@@ -23,7 +23,7 @@ class Routes {
     }
 
     private routes(): void {
-        this.express.use('/test', testrouter);
+        this.express.use('/location', locationrouter);
     }
 }
 
