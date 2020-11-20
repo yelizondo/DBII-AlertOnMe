@@ -10,10 +10,11 @@ const config = {
 }
 
 
-export default function Report(uuid, lat, long, canton){
-    console.log(uuid)
-    console.log(lat)
-    console.log(long)
-    console.log(canton);
+export default function Report(uuid, lat, long){
+    console.log("UUID:", uuid);
+    console.log("Latitude:", lat);
+    console.log("Longitude:", long);
+    Locate(lat, long)
+    .then(canton=>console.log("Cantón:", canton))
     //return axios(config);
 }

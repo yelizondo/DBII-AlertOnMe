@@ -21,9 +21,9 @@ const config = {
 export default function Locate(lat, long){
     config.params.latlng = lat + "," + long;
 
-    axios(config)
+    return axios(config)
     .then(res=>{
-        // console.log(res.data.results[0].address_components[0].long_name);
         return res.data.results[0].address_components[0].long_name;
     })
+    .catch (e=>console.log(e))
 }

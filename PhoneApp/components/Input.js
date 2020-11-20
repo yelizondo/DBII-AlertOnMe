@@ -5,14 +5,14 @@ export default function Input(props) {
     const [text, setText] = useState();
     const onChange = pText => {
         if (pinValidator.test(pText)) {
-            setText(pText)
-        };
+            setText(pText);
+        }
     };
 
     const onInput = pText => {
         if (pinValidator.test(text)) {
             props.changer(text);
-        };
+        }
     };
 
     return(

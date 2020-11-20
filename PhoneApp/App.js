@@ -66,8 +66,9 @@ export default function App() {
       });
     })
     .then(()=>{
-      Report(session.uuid, session.latitude, session.longitude, Locate(session.latitude, session.longitude));
-    });
+      console.log(session);
+      Report(session.uuid, session.latitude, session.longitude);
+    })
   };
   
   // app JSX
