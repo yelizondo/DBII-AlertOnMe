@@ -1,0 +1,11 @@
+{
+    "ignore": [".git", "node_modules"],
+    "watch": ["./"],
+    "exec": "npm start",
+    "ext": "ts",
+    "env": {
+        "DB_NAME": "alertonme",
+        "DB_HOST": "11.0.0.6:27017,11.0.0.6:27017",
+        "AUTH_TOKEN": ";LASK0865sdfj-alsdkf898s_lasdk"
+    }
+}

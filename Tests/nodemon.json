@@ -4,7 +4,7 @@
     "exec": "npm start",
     "ext": "ts",
     "env": {
-        "DB_NAME": "toursdb",
-        "DB_HOST": "10.0.0.6:27017"
+        "DB_NAME": "pruebas",
+        "DB_HOST": "127.0.0.1:5004"
     }
 }
