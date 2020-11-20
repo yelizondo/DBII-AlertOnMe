@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
+import { set } from 'react-native-reanimated';
 
 export default function Input(props) {
     const [text, setText] = useState();
     const onChange = pText => {
-        if (pinValidator.test(pText)) {
+        if(pinValidator.test(pText)){
             setText(pText);
         }
     };
 
+    useEffect(()=>{
+        if(!pinValidator.test(text)){
+            setText('');
+        }
+    },[text])
+
     const onInput = pText => {
-        if (pinValidator.test(text)) {
+        if (finalPinValidator.test(text)) {
             props.changer(text);
+        } else {
+            setText('');
         }
     };
 
@@ -30,6 +39,7 @@ export default function Input(props) {
 };
 
 const pinValidator = /^[0-9]{0,3}$/;
+const finalPinValidator = /^[0-9]{3}$/;
 
 const styles = StyleSheet.create({
     container: {
