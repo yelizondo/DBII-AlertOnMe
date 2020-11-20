@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import uuid from 'react-native-uuid';
+import {v4 as uuid} from 'uuid';
 import Header from './components/Header';
 import Button from './components/Button';
 import Selector from './components/Selector';
@@ -68,7 +68,7 @@ export default function App() {
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
         updateSession({
-          uuid: uuid.v4(),
+          uuid: uuid(),
           latitude: latitude,
           longitude: longitude,
           pin: session.pin,
