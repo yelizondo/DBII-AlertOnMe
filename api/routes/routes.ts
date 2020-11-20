@@ -10,14 +10,7 @@ class Routes {
     constructor() {
         this.express = express();
         this.logger = new Logger();
-
-        this.middleware();
         this.routes();
-    }
-
-    private middleware(): void {
-        this.express.use(bodyParser.json());
-        this.express.use(bodyParser.urlencoded({ extended: false }));
     }
 
     private routes(): void {
