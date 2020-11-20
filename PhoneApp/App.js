@@ -42,6 +42,7 @@ export default function App() {
     })
   }
 
+  // hook for starting track
   useEffect(()=>{
     if (session.tracking){
       console.log(session);
