@@ -25,7 +25,7 @@ export class LocationController {
     }
 
     public setVisualizationForDB() {
-        return Location.find().distinct('location', (error, locations) => {
+        return Location.distinct('location', (error, locations) => {
             locations.forEach((myDoc) => {
                 const longitude = myDoc.coordinates[0];
                 const latitude = myDoc.coordinates[1];
@@ -37,15 +37,15 @@ export class LocationController {
                             $maxDistance: 10
                         }
                     }
-                }).countDocuments({}, (err, count) => {
-                    console.log(err);
-                    Intersection.update({ longitude, latitude },
-                    {
-                        $set: { count }
-                    },
-                    {
-                        upsert: true
-                    });
+                }).estimatedDocumentCount((err, count) => {
+                    Intersection.findOneAndUpdate(
+                        {longitude, latitude}, 
+                        { count }, 
+                        { upsert: true, new: true, setDefaultsOnInsert: true },
+                        (error, result) => {
+                            if (error) return;
+                        }
+                    );
                 });
             });
         });

@@ -26,7 +26,8 @@ app.get('/', (req, res, next) => {
     .then(result => {
         console.log(result);
         res.status(200).json({
-            message: 'Query executed correctly'
+            message: 'Query executed correctly',
+            response: result
         });
     })
     .catch(err => {
