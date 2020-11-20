@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { LocationController } from '../controllers/location';
 import * as papa from 'papaparse';
+import { locationrouter } from './location';
 
 const app = express();
 
@@ -25,9 +26,12 @@ app.get('/', (req, res, next) => {
     LocationController.getInstance()
     .getVisualizationInfo(Number(req.query.limit))
     .then(result => {
-        const csv = papa.unparse(result);
-        console.log(csv);
-        res.status(200).sendFile(csv);
+        const cleanResult: any[] = [];
+        result.forEach(loc => {
+            cleanResult.push({ latitude: loc.latitude, longitud: loc.longitude, count: loc.count});
+        });
+        const csv = papa.unparse(cleanResult);
+        res.status(200).send(csv);
     })
     .catch(err => {
         res.status(500).json({
