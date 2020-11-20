@@ -10,6 +10,15 @@ import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
 
 export default function App() {
+  // hook for adding state to the app
+  const [session, updateSession] = useState({
+    uuid: -1,
+    latitude: -1,
+    longitude: -1,
+    pin: -1,
+    time: 5
+  });
+
   // hook for ensuring having permission for location services
   useEffect(()=>{
     Location.getPermissionsAsync()
@@ -19,15 +28,7 @@ export default function App() {
       }
     });
   }, []);
-
-  // hook for adding state to the app
-  const [session, updateSession] = useState({
-    uuid: -1,
-    latitude: -1,
-    longitude: -1,
-    pin: -1,
-    time: 5
-  });
+  
 
   // function for pin Input
   const setPin = pPin =>{
