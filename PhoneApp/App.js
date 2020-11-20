@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-// import uuid from 'react-native-uuid';
-import UUIDGenerator from 'react-native-uuid-generator';
+import uuid from 'react-native-uuid';
 import Header from './components/Header';
 import Button from './components/Button';
 import Selector from './components/Selector';
@@ -58,8 +57,7 @@ export default function App() {
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
       updateSession({
-        // uuid: uuid.v4(),
-        uuid: UUIDGenerator.getRandomUUID().then((pUuid)=>pUuid),
+        uuid: uuid.v4(),
         latitude: latitude,
         longitude: longitude,
         pin: session.pin,
@@ -70,15 +68,6 @@ export default function App() {
       console.log(session);
       Report(session.uuid, session.latitude, session.longitude);
     })
-
-     // UUIDGenerator.getRandomUUID()
-    // .then(uuid=>console.log(uuid))
-
-      // return Promise.all([UUIDGenerator.getRandomUUID(), Pinpoint()])
-      // .then((a)=>{
-      //   console.log(a);
-      // })
-      // .catch((e)=>{console.log(e);})
   };
 
    
