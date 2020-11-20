@@ -10,6 +10,16 @@ import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
 
 export default function App() {
+  // hook for adding state to the app
+  const [session, updateSession] = useState({
+    uuid: -1,
+    latitude: -1,
+    longitude: -1,
+    pin: -1,
+    time: 5,
+    tracking: false
+  });
+
   // hook for ensuring having permission for location services
   useEffect(()=>{
     Location.getPermissionsAsync()
@@ -20,15 +30,6 @@ export default function App() {
     });
   }, []);
 
-  // hook for adding state to the app
-  const [session, updateSession] = useState({
-    uuid: -1,
-    latitude: -1,
-    longitude: -1,
-    pin: -1,
-    time: 5
-  });
-
   // function for pin Input
   const setPin = pPin =>{
     updateSession({
@@ -36,9 +37,17 @@ export default function App() {
       latitude: session.latitude,
       longitude: session.longitude,
       pin: pPin,
-      time: session.time
+      time: session.time,
+      tracking: session.tracking
     })
   }
+
+  useEffect(()=>{
+    if (session.tracking){
+      console.log(session);
+      Report(session.uuid, session.latitude, session.longitude);
+    }
+  }, [session.tracking]);
 
   // function for time Selector
   const setTime = pTime =>{
@@ -47,7 +56,8 @@ export default function App() {
       latitude: session.latitude,
       longitude: session.longitude,
       pin: session.pin,
-      time: pTime
+      time: pTime,
+      tracking: session.tracking
     })
   }
   
@@ -56,22 +66,16 @@ export default function App() {
   const beginTracking = () => {
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
-      updateSession({
-        uuid: uuid.v4(),
-        latitude: latitude,
-        longitude: longitude,
-        pin: session.pin,
-        time: session.time
-      });
-    })
-    .then(()=>{
-      console.log(session);
-      Report(session.uuid, session.latitude, session.longitude);
+        updateSession({
+          uuid: uuid.v4(),
+          latitude: latitude,
+          longitude: longitude,
+          pin: session.pin,
+          time: session.time,
+          tracking: true
+        });
     })
   };
-
-   
-
   
   // app JSX
   return (
