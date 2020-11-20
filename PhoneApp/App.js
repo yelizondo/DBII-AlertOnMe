@@ -76,15 +76,22 @@ export default function App() {
           tracking: true
         });
     })
-  };
-  
+  }
+
+  const timer = () => {
+    setInterval(beginTracking, 5000);
+    setTimeout(function() { 
+      clearInterval(interval); 
+    }, 60000 * session.time);
+  }
+
   // app JSX
   return (
   <View style={styles.container}>
     <Header title='Alert On Me!' />
     <Selector prompt='For how long will you like to be tracked?' action={setTime}/>
     <Input placeholder="Insert a 3 digit pin" changer={setPin}/>
-    <Button text='Track me' action = {beginTracking} />
+    <Button text='Track me' action = {timer} />
   </View>
   );
 };
