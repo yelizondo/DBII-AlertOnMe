@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import uuid from 'react-native-uuid';
+import {v4 as uuid} from 'uuid';
 import Header from './components/Header';
 import Button from './components/Button';
 import Selector from './components/Selector';
@@ -68,7 +68,7 @@ export default function App() {
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
         updateSession({
-          uuid: uuid.v4(),
+          uuid: uuid(),
           latitude: latitude,
           longitude: longitude,
           pin: session.pin,
@@ -76,15 +76,22 @@ export default function App() {
           tracking: true
         });
     })
-  };
-  
+  }
+
+  const timer = () => {
+    setInterval(beginTracking, 5000);
+    setTimeout(function() { 
+      clearInterval(interval); 
+    }, 60000 * session.time);
+  }
+
   // app JSX
   return (
   <View style={styles.container}>
     <Header title='Alert On Me!' />
     <Selector prompt='For how long will you like to be tracked?' action={setTime}/>
     <Input placeholder="Insert a 3 digit pin" changer={setPin}/>
-    <Button text='Track me' action = {beginTracking} />
+    <Button text='Track me' action = {timer} />
   </View>
   );
 };
