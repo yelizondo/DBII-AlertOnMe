@@ -80,7 +80,7 @@ export default function App() {
 
   // hay que llamar a algo distinto de beginTracking
   const timer = () => {
-    setInterval(beginTracking, 5000);
+    setInterval((beginTracking), 5000);
     setTimeout(function() { 
       clearInterval(interval); 
     }, 60000 * session.time);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { set } from 'react-native-reanimated';
 
 export default function Input(props) {
     const [text, setText] = useState();

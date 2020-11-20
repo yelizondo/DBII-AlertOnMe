@@ -2,19 +2,20 @@ import axios from 'axios';
 import Locate from './Locate'
 
 const config = {
-    method: 'put',
-    url: 'REQUEST A NUESTRO API',
-    // headers: {
-    //   'Content-Type': 'application/json'
-    // }
+    method: 'post',
+    url: 'http://172.23.66.105:5000/api/location?',
+    params: {}
 }
 
 
 export default function Report(uuid, lat, long){
-    console.log("UUID:", uuid);
-    console.log("Latitude:", lat);
-    console.log("Longitude:", long);
+    config.params.guid = uuid;
+    config.params.latitude = lat;
+    config.params.longitude = long;
     Locate(lat, long)
-    .then(canton=>console.log("Cantón:", canton))
-    //return axios(config);
+    .then(canton=>{
+        config.params.canton = canton;
+        console.log("enviado", uuid);
+        return axios(config);
+    })   
 }
