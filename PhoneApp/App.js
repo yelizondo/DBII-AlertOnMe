@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import uuid from 'react-native-uuid';
+// import uuid from 'react-native-uuid';
+import UUIDGenerator from 'react-native-uuid-generator';
 import Header from './components/Header';
 import Button from './components/Button';
 import Selector from './components/Selector';
@@ -8,7 +9,6 @@ import Input from './components/Input';
 import Report from './api_comms/Report';
 import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
-import Locate from './api_comms/Locate';
 
 export default function App() {
   // hook for ensuring having permission for location services
@@ -58,7 +58,8 @@ export default function App() {
     Pinpoint()
     .then(({coords:{latitude, longitude}})=>{
       updateSession({
-        uuid: uuid.v4(),
+        // uuid: uuid.v4(),
+        uuid: UUIDGenerator.getRandomUUID().then((pUuid)=>pUuid),
         latitude: latitude,
         longitude: longitude,
         pin: session.pin,
@@ -69,7 +70,19 @@ export default function App() {
       console.log(session);
       Report(session.uuid, session.latitude, session.longitude);
     })
+
+     // UUIDGenerator.getRandomUUID()
+    // .then(uuid=>console.log(uuid))
+
+      // return Promise.all([UUIDGenerator.getRandomUUID(), Pinpoint()])
+      // .then((a)=>{
+      //   console.log(a);
+      // })
+      // .catch((e)=>{console.log(e);})
   };
+
+   
+
   
   // app JSX
   return (
