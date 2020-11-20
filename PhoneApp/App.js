@@ -76,8 +76,16 @@ export default function App() {
           tracking: true
         });
     })
-  };
-  
+  }
+
+  // hay que llamar a algo distinto de beginTracking
+  const timer = () => {
+    setInterval(beginTracking, 5000);
+    setTimeout(function() { 
+      clearInterval(interval); 
+    }, 60000 * session.time);
+  }
+
   // app JSX
   return (
   <View style={styles.container}>
