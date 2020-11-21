@@ -1,10 +1,10 @@
 import * as express from 'express';
-import { LocationController } from '../controllers/location';
+import { VisualizationController } from '../controllers';
 
 const app = express();
 
 app.post('/', (req, res, next) => {
-    LocationController.getInstance()
+    VisualizationController.getInstance()
     .setVisualizationForDB()
     .then(msg =>{
         res.status(200).json({
@@ -20,7 +20,7 @@ app.post('/', (req, res, next) => {
 
 app.get('/', (req, res, next) => {
     const defaultLimit = 5;
-    LocationController.getInstance()
+    VisualizationController.getInstance()
     .getVisualizationInfo(Number(req.query.limit || defaultLimit))
     .then(result => {
         res.status(200).json(result);
