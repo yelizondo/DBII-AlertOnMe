@@ -42,8 +42,8 @@ export class LocationController {
                         {longitude, latitude},
                         { count },
                         { upsert: true, new: true, setDefaultsOnInsert: true },
-                        (errr, result) => {
-                            if (errr) return;
+                        (e, result) => {
+                            if (e) return;
                         }
                     );
                 });
