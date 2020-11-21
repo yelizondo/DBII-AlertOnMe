@@ -1,7 +1,6 @@
 import * as express from 'express';
 import { LocationController } from '../controllers/location';
 import * as papa from 'papaparse';
-import { locationrouter } from './location';
 
 const app = express();
 
