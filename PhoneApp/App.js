@@ -24,20 +24,6 @@ export default function App() {
   // hook for Dialog handling
   const [visible, updateDialog] = useState(false);
 
-  const cancelVerification = ()=>{
-    updateDialog(false);
-    console.log("Registrar que quedó abierta la sesión");
-  }
-
-  const enterVerification = (pPin)=>{
-    if(pPin==session.pin){
-      console.log("Registrar que se completó con éxito");
-    } else {
-      console.log("Registrar que quedó abierta la sesión");
-    }
-    updateDialog(false);
-  }
-
   // hook for ensuring having permission for location services
   useEffect(()=>{
     Location.getPermissionsAsync()
@@ -47,6 +33,34 @@ export default function App() {
       }
     });
   }, []);
+
+
+  // hook for starting track
+  useEffect(()=>{
+    if (session.tracking){
+      // console.log(session);
+      // Report(session.uuid, session.latitude, session.longitude);
+      updateDialog(true)
+    }
+    }, [session.tracking]);
+
+    
+  // cancel function for Confirmer 
+  const cancelVerification = ()=>{
+    updateDialog(false);
+    console.log("Registrar que quedó abierta la sesión");
+  }
+
+  // enter function for Confirmer
+  const enterVerification = (pPin)=>{
+    if(pPin==session.pin){
+      console.log("Registrar que se completó con éxito");
+    } else {
+      console.log("Registrar que quedó abierta la sesión");
+    }
+    updateDialog(false);
+  }
+  
 
   // function for pin Input
   const setPin = pPin =>{
@@ -59,15 +73,7 @@ export default function App() {
       tracking: session.tracking
     })
   }
-
-  // hook for starting track
-  useEffect(()=>{
-    if (session.tracking){
-      // console.log(session);
-      // Report(session.uuid, session.latitude, session.longitude);
-      updateDialog(true)
-    }
-    }, [session.tracking]);
+  
 
   // function for time Selector
   const setTime = pTime =>{
