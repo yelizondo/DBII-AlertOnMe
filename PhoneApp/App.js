@@ -8,6 +8,7 @@ import Input from './components/Input';
 import Report from './api_comms/Report';
 import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
+import Confirmer from './components/Confirmer';
 
 export default function App() {
   // hook for adding state to the app
@@ -19,6 +20,23 @@ export default function App() {
     time: 5,
     tracking: false
   });
+
+  // hook for Dialog handling
+  const [visible, updateDialog] = useState(false);
+
+  const cancelVerification = ()=>{
+    updateDialog(false);
+    console.log("Registrar que quedó abierta la sesión");
+  }
+
+  const enterVerification = (pPin)=>{
+    if(pPin==session.pin){
+      console.log("Registrar que se completó con éxito");
+    } else {
+      console.log("Registrar que quedó abierta la sesión");
+    }
+    updateDialog(false);
+  }
 
   // hook for ensuring having permission for location services
   useEffect(()=>{
@@ -45,10 +63,11 @@ export default function App() {
   // hook for starting track
   useEffect(()=>{
     if (session.tracking){
-      console.log(session);
-      Report(session.uuid, session.latitude, session.longitude);
+      // console.log(session);
+      // Report(session.uuid, session.latitude, session.longitude);
+      updateDialog(true)
     }
-  }, [session.tracking]);
+    }, [session.tracking]);
 
   // function for time Selector
   const setTime = pTime =>{
@@ -92,6 +111,13 @@ export default function App() {
     <Header title='Alert On Me!' />
     <Selector prompt='For how long will you like to be tracked?' action={setTime}/>
     <Input placeholder="Insert a 3 digit pin" changer={setPin}/>
+    <Confirmer 
+        title='Confirm arrival' 
+        description='Enter the pin provided at the beginning' 
+        visible={visible}
+        cancel={cancelVerification}
+        enter={enterVerification}
+    />
     <Button text='Track me' action = {beginTracking} />
   </View>
   );
