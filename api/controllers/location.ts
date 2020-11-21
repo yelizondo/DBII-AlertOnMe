@@ -39,11 +39,11 @@ export class LocationController {
                     }
                 }).estimatedDocumentCount((err, count) => {
                     Intersection.findOneAndUpdate(
-                        {longitude, latitude}, 
-                        { count }, 
+                        {longitude, latitude},
+                        { count },
                         { upsert: true, new: true, setDefaultsOnInsert: true },
-                        (error, result) => {
-                            if (error) return;
+                        (e, result) => {
+                            if (e) return;
                         }
                     );
                 });
