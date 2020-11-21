@@ -9,6 +9,7 @@ import Report from './api_comms/Report';
 import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
 import Confirmer from './components/Confirmer';
+import BackgroundTimer from 'react-native-background-timer';
 
 export default function App() {
   // hook for adding state to the app
@@ -39,12 +40,24 @@ export default function App() {
   useEffect(()=>{
     if (session.tracking){
       // console.log(session);
-      // Report(session.uuid, session.latitude, session.longitude);
-      updateDialog(true)
+      
+      let remaining = session.time*60000
+      
+      BackgroundTimer.runBackgroundTimer(() => { 
+        if (remaining <= 0){
+          BackgroundTimer.stopBackgroundTimer(); //after this call all code on background stop run.
+          updateDialog(true)
+        }
+        console.log("Eso");
+        console.log(remaining);
+        remaining-=1000;
+        // Report(session.uuid, session.latitude, session.longitude);
+        }, 
+        5000);
     }
     }, [session.tracking]);
 
-    
+
   // cancel function for Confirmer 
   const cancelVerification = ()=>{
     updateDialog(false);
@@ -85,6 +98,7 @@ export default function App() {
       time: pTime,
       tracking: session.tracking
     })
+    // updateTimer(pTime*60000)
   }
   
   // function for Button
@@ -104,12 +118,12 @@ export default function App() {
   }
 
   // hay que llamar a algo distinto de beginTracking
-  const timer = () => {
-    setInterval((beginTracking), 5000);
-    setTimeout(function() { 
-      clearInterval(interval); 
-    }, 60000 * session.time);
-  }
+  // const timer = () => {
+  //   setInterval((beginTracking), 5000);
+  //   setTimeout(function() { 
+  //     clearInterval(interval); 
+  //   }, 60000 * session.time);
+  // }
 
   // app JSX
   return (
