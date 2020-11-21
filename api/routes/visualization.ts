@@ -22,7 +22,7 @@ app.post('/', (req, res, next) => {
     });
 });
 
-app.get('/t', (req, res, next) => {
+app.get('/', (req, res, next) => {
     LocationController.getInstance()
     .getVisualizationInfo(Number(req.query.limit))
     .then(result => {
