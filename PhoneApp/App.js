@@ -39,19 +39,15 @@ export default function App() {
   // hook for starting track
   useEffect(()=>{
     if (session.tracking){
-      // console.log(session);
-      
       let remaining = session.time*60000
       
       BackgroundTimer.runBackgroundTimer(() => { 
         if (remaining <= 0){
-          BackgroundTimer.stopBackgroundTimer(); //after this call all code on background stop run.
+          BackgroundTimer.stopBackgroundTimer();
           updateDialog(true)
         }
-        console.log("Eso");
-        console.log(remaining);
-        remaining-=1000;
-        // Report(session.uuid, session.latitude, session.longitude);
+        remaining-=5000;
+        Report(session.uuid, session.latitude, session.longitude);
         }, 
         5000);
     }
@@ -62,6 +58,7 @@ export default function App() {
   const cancelVerification = ()=>{
     updateDialog(false);
     console.log("Registrar que quedó abierta la sesión");
+    clearSession();
   }
 
   // enter function for Confirmer
@@ -72,6 +69,7 @@ export default function App() {
       console.log("Registrar que quedó abierta la sesión");
     }
     updateDialog(false);
+    clearSession();
   }
   
 
@@ -98,7 +96,6 @@ export default function App() {
       time: pTime,
       tracking: session.tracking
     })
-    // updateTimer(pTime*60000)
   }
   
   // function for Button
@@ -117,13 +114,17 @@ export default function App() {
     })
   }
 
-  // hay que llamar a algo distinto de beginTracking
-  // const timer = () => {
-  //   setInterval((beginTracking), 5000);
-  //   setTimeout(function() { 
-  //     clearInterval(interval); 
-  //   }, 60000 * session.time);
-  // }
+  const clearSession = () => {
+    updateSession({
+      uuid: -1,
+      latitude: -1,
+      longitude: -1,
+      pin: -1,
+      time: 5,
+      tracking: false
+    });
+  }
+
 
   // app JSX
   return (
