@@ -23,8 +23,9 @@ app.post('/', (req, res, next) => {
 });
 
 app.get('/', (req, res, next) => {
+    const defaultLimit = 5;
     LocationController.getInstance()
-    .getVisualizationInfo(Number(req.query.limit))
+    .getVisualizationInfo(Number(req.query.limit || defaultLimit))
     .then(result => {
         const cleanResult: any[] = [];
         result.forEach(loc => {
