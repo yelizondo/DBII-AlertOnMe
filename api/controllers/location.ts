@@ -54,7 +54,8 @@ export class LocationController {
     public getVisualizationInfo(pLimit:number) {
         return Intersection.aggregate([
             { $sort: { count: -1}},
-            { $limit: pLimit}
+            { $limit: pLimit},
+            { $project: { _id:0, longitude: 1, latitude: 1, count: 1}}
         ])
     }
 

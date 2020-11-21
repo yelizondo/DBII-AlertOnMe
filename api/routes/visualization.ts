@@ -26,11 +26,7 @@ app.get('/', (req, res, next) => {
     LocationController.getInstance()
     .getVisualizationInfo(Number(req.query.limit || defaultLimit))
     .then(result => {
-        const cleanResult: any[] = [];
-        result.forEach(loc => {
-            cleanResult.push({ latitude: loc.latitude, longitud: loc.longitude, count: loc.count});
-        });
-        const csv = papa.unparse(cleanResult);
+        const csv = papa.unparse(result);
         res.status(200).send(csv);
     })
     .catch(err => {
