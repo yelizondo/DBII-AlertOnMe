@@ -54,7 +54,6 @@ export class VisualizationController {
 
     public getMapVisualizationInfo(pLimit:number) {
         return Intersection.aggregate([
-            { $match: { canton: pCanton }},
             { $sort: { count: -1}},
             { $limit: pLimit}
         ])
