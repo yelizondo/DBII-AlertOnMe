@@ -23,7 +23,8 @@ class App {
         try {
             mongoose.connect(connectionURL, {
                 useNewUrlParser: true,
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                useFindAndModify: false
             });
 
             this.db = mongoose.connection;
