@@ -3,7 +3,7 @@ import Locate from './Locate'
 
 const config = {
     method: 'post',
-    url: 'http://172.23.66.105:5000/api/location?',
+    url: 'http://172.23.66.105:5000/api/location',
     params: {}
 }
 

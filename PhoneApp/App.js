@@ -7,6 +7,7 @@ import Selector from './components/Selector';
 import Input from './components/Input';
 import Report from './api_comms/Report';
 import Pinpoint from './api_comms/Pinpoint';
+import Confirm from './api_comms/Confirm';
 import * as Location from 'expo-location';
 import Confirmer from './components/Confirmer';
 
@@ -53,16 +54,16 @@ export default function App() {
   // cancel function for Confirmer 
   const cancelVerification = ()=>{
     updateDialog(false);
-    console.log("Registrar que quedó abierta la sesión");
+    Confirm(session.uuid, false);
     clearSession();
   }
 
   // enter function for Confirmer
   const enterVerification = (pPin)=>{
     if(pPin==session.pin){
-      console.log("Registrar que se completó con éxito");
+      Confirm(session.uuid, true);
     } else {
-      console.log("Registrar que quedó abierta la sesión");
+      Confirm(session.uuid, false);
     }
     updateDialog(false);
     clearSession();
