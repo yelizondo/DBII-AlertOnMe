@@ -18,10 +18,23 @@ app.post('/', (req, res, next) => {
     });
 });
 
-app.get('/', (req, res, next) => {
+app.get('/map', (req, res, next) => {
     const defaultLimit = 5;
     VisualizationController.getInstance()
-    .getVisualizationInfo(Number(req.query.limit || defaultLimit))
+    .getMapVisualizationInfo(Number(req.query.limit || defaultLimit))
+    .then(result => {
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: 'Error in query execution'
+        });
+    });
+});
+
+app.get('/heatMap', (req, res, next) => {
+    VisualizationController.getInstance()
+    .getActivityVisualizationInfo(String(req.query.canton)) // ! Si se decide no poner match hay que quitar
     .then(result => {
         res.status(200).json(result);
     })
