@@ -18,24 +18,35 @@ app.post('/', (req, res, next) => {
     });
 });
 
-app.get('/', (req, res, next) => {
+app.get('/map', (req, res, next) => {
     const defaultLimit = 5;
-    if (req.query.canton) {
-        VisualizationController.getInstance()
-        .getVisualizationInfo(Number(req.query.limit || defaultLimit), req.query.canton as string)
-        .then(result => {
-            res.status(200).json(result);
-        })
-        .catch(err => {
-            res.status(500).json({
-                message: 'Error in query execution'
-            });
+    VisualizationController.getInstance()
+    .getMapVisualizationInfo(Number(req.query.limit || defaultLimit))
+    .then(result => {
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: 'Error in query execution'
         });
     } else {
         res.status(400).json({
             message: "Invalid query"
         });
     }
+});
+
+app.get('/heatMap', (req, res, next) => {
+    VisualizationController.getInstance()
+    .getActivityVisualizationInfo(String(req.query.canton)) // ! Si se decide no poner match hay que quitar
+    .then(result => {
+        res.status(200).json(result);
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: 'Error in query execution'
+        });
+    });
 });
 
 export { app as visualizationrouter };

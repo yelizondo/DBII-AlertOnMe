@@ -52,11 +52,29 @@ export class VisualizationController {
         });
     }
 
-    public getVisualizationInfo(pLimit:number, pCanton:string) {
+    public getMapVisualizationInfo(pLimit:number) {
         return Intersection.aggregate([
-            { $match: { canton: pCanton }},
             { $sort: { count: -1}},
             { $limit: pLimit}
+        ])
+    }
+
+    public getActivityVisualizationInfo(pCanton:string){
+        return Location.aggregate([
+        // ? { $match: { name: pCanton } }, Decidir si se quieren todos
+            {
+                $project: {
+                    "h": {$hour: "$timestamp"},
+                    "dotw" : true,
+                    "canton" : true // ! Si se decide que solo para uno hay que quitarlo
+                }
+            },
+            {
+                $group: {
+                    _id: {dotw: "$dotw", hour: "$h", canton:"$canton" }, // ! Si se decide que solo para uno hay que quitar canton
+                    count: {$sum:1}
+                }
+            }
         ])
     }
 

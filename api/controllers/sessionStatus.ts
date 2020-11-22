@@ -1,4 +1,3 @@
-import { Session } from "inspector";
 import { Logger } from "../common";
 import { SessionStatus } from "../models";
 
