@@ -29,6 +29,7 @@ export class VisualizationController {
             locations.forEach((myDoc) => {
                 const longitude = myDoc.coordinates[0];
                 const latitude = myDoc.coordinates[1];
+                const canton = myDoc.canton;
                 Location.find({
                     location: {
                         $near : {
@@ -40,7 +41,7 @@ export class VisualizationController {
                 }).estimatedDocumentCount((err, count) => {
                     Intersection.findOneAndUpdate(
                         {longitude, latitude},
-                        { count },
+                        { count, canton },
                         { upsert: true, new: true, setDefaultsOnInsert: true },
                         (e, result) => {
                             if (e) return;
@@ -51,8 +52,9 @@ export class VisualizationController {
         });
     }
 
-    public getVisualizationInfo(pLimit:number) {
+    public getVisualizationInfo(pLimit:number, pCanton:string) {
         return Intersection.aggregate([
+            { $match: { canton: pCanton }},
             { $sort: { count: -1}},
             { $limit: pLimit}
         ])
