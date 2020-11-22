@@ -1,42 +1,33 @@
 import * as express from 'express';
-import { LocationController } from '../controllers/location';
-import * as papa from 'papaparse';
+import { VisualizationController } from '../controllers';
 
 const app = express();
 
 app.post('/', (req, res, next) => {
-    LocationController.getInstance()
+    VisualizationController.getInstance()
     .setVisualizationForDB()
     .then(msg =>{
         res.status(200).json({
-            message: 'Query executed correctly',
-            content: msg
+            message: 'Query executed correctly'
         });
     })
     .catch(err => {
         res.status(500).json({
-            message: 'Error in query execution',
-            error: err
+            message: 'Error in query execution'
         });
     });
 });
 
 app.get('/', (req, res, next) => {
     const defaultLimit = 5;
-    LocationController.getInstance()
+    VisualizationController.getInstance()
     .getVisualizationInfo(Number(req.query.limit || defaultLimit))
     .then(result => {
-        const cleanResult: any[] = [];
-        result.forEach(loc => {
-            cleanResult.push({ latitude: loc.latitude, longitud: loc.longitude, count: loc.count});
-        });
-        const csv = papa.unparse(cleanResult);
-        res.status(200).send(csv);
+        res.status(200).json(result);
     })
     .catch(err => {
         res.status(500).json({
-            message: 'Error in query execution',
-            error: err
+            message: 'Error in query execution'
         });
     });
 });
