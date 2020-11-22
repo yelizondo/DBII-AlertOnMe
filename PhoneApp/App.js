@@ -9,7 +9,6 @@ import Report from './api_comms/Report';
 import Pinpoint from './api_comms/Pinpoint';
 import * as Location from 'expo-location';
 import Confirmer from './components/Confirmer';
-import BackgroundTimer from 'react-native-background-timer';
 
 export default function App() {
   // hook for adding state to the app
@@ -35,21 +34,18 @@ export default function App() {
     });
   }, []);
 
-
-  // hook for starting track
+  // hook for sending tracking info to backend 
   useEffect(()=>{
     if (session.tracking){
       let remaining = session.time*60000
-      
-      BackgroundTimer.runBackgroundTimer(() => { 
-        if (remaining <= 0){
-          BackgroundTimer.stopBackgroundTimer();
-          updateDialog(true)
-        }
-        remaining-=5000;
+      const timer = setInterval(()=>{
         Report(session.uuid, session.latitude, session.longitude);
-        }, 
-        5000);
+        remaining-=5000
+        if (remaining <= 0){
+          updateDialog(true);
+          clearInterval(timer);
+        }
+      },5000);
     }
     }, [session.tracking]);
 
