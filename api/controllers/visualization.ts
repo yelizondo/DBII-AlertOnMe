@@ -11,11 +11,10 @@ export class VisualizationController {
 
     public setVisualizationForDB() {
         return Location.aggregate(
-            [	
+            [
                 {
                     $project: {
                         "canton" : true,
-                        "dotw" : true,
                         "location": true
                     }
                 },
@@ -25,34 +24,37 @@ export class VisualizationController {
                         canton: {$first: "$canton"}
                     }
                 }
-            ]
-        ).exec((err, result) => { // ! Error
-            result.forEach((myDoc) =>{
-            let canton = myDoc.canton;
-            let longitude = myDoc._id.location.coordinates[0];
-            let latitude = myDoc._id.location.coordinates[1];
-            let intersectionCount = result.find( // ! Aqui empieza el error
-                {
-                    location:
-                    { $near: 	
+            ], (err,result) => {
+                result.forEach((myDoc) =>{
+                    const canton = myDoc.canton;
+                    const longitude = myDoc._id.location.coordinates[0];
+                    const latitude = myDoc._id.location.coordinates[1];
+                    const intersectionCount = Location.find(
                         {
-                            $geometry : { type: "Point", coordinates: myDoc._id.location.coordinates },
-                            $minDistance: 0,
-                            $maxDistance: 10
+                            location:
+                            { $near:
+                                {
+                                    $geometry : { type: "Point", coordinates: myDoc._id.location.coordinates },
+                                    $minDistance: 0,
+                                    $maxDistance: 10
+                                }
+                            }
                         }
-                    }
-                }
-            ).estimatedDocumentCount((err, count) => {
-                Intersection.findOneAndUpdate(
-                    {longitude, latitude, canton},
-                    { count },
-                    { upsert: true, new: true, setDefaultsOnInsert: true },
-                    (e, result) => {
-                        if (e) return;
-                    }
-                );
-            });
-        })})
+                    ).exec((error, findDocuments) => {
+                        const lenght = findDocuments.length;
+                        console.log(lenght);
+                        Intersection.findOneAndUpdate(
+                            {longitude, latitude, canton},
+                            { count: lenght },
+                            { upsert: true, new: true, setDefaultsOnInsert: true },
+                            (e, res) => {
+                                if (e) return;
+                            }
+                        );
+                    });
+                });
+            }
+        )
     }
 
     public getMapVisualizationInfo(pLimit:number) {
