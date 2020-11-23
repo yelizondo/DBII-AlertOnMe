@@ -10,31 +10,50 @@ export class VisualizationController {
     }
 
     public setVisualizationForDB() {
-        return Location.distinct('location', (error, locations) => {
-            locations.forEach((myDoc) => {
-                const longitude = myDoc.coordinates[0];
-                const latitude = myDoc.coordinates[1];
-                const canton = myDoc.canton;
-                Location.find({
-                    location: {
-                        $near : {
-                            $geometry: { type: "Point", coordinates: myDoc.coordinates },
-                            $minDistance: 0.1,
-                            $maxDistance: 10
-                        }
+        return Location.aggregate(
+            [
+                {
+                    $project: {
+                        "canton" : true,
+                        "location": true
                     }
-                }).estimatedDocumentCount((err, count) => {
-                    Intersection.findOneAndUpdate(
-                        {longitude, latitude},
-                        { count, canton },
-                        { upsert: true, new: true, setDefaultsOnInsert: true },
-                        (e, result) => {
-                            if (e) return;
+                },
+                {
+                    $group: {
+                        _id: {location: "$location"},
+                        canton: {$first: "$canton"}
+                    }
+                }
+            ], (err,result) => {
+                result.forEach((myDoc) =>{
+                    const canton = myDoc.canton;
+                    const longitude = myDoc._id.location.coordinates[0];
+                    const latitude = myDoc._id.location.coordinates[1];
+                    const intersectionCount = Location.find(
+                        {
+                            location:
+                            { $near:
+                                {
+                                    $geometry : { type: "Point", coordinates: myDoc._id.location.coordinates },
+                                    $minDistance: 0,
+                                    $maxDistance: 10
+                                }
+                            }
                         }
-                    );
+                    ).exec((error, findDocuments) => {
+                        const lenght = findDocuments.length;
+                        Intersection.findOneAndUpdate(
+                            {longitude, latitude, canton},
+                            { count: lenght },
+                            { upsert: true, new: true, setDefaultsOnInsert: true },
+                            (e, res) => {
+                                if (e) return;
+                            }
+                        );
+                    });
                 });
-            });
-        });
+            }
+        )
     }
 
     public getMapVisualizationInfo(pLimit:number) {
@@ -44,19 +63,18 @@ export class VisualizationController {
         ])
     }
 
-    public getActivityVisualizationInfo(pCanton:string){
+    public getActivityVisualizationInfo(){
         return Location.aggregate([
-        // ? { $match: { name: pCanton } }, Decidir si se quieren todos
             {
                 $project: {
                     "h": {$hour: "$timestamp"},
                     "dotw" : true,
-                    "canton" : true // ! Si se decide que solo para uno hay que quitarlo
+                    "canton" : true
                 }
             },
             {
                 $group: {
-                    _id: {dotw: "$dotw", hour: "$h", canton:"$canton" }, // ! Si se decide que solo para uno hay que quitar canton
+                    _id: {dotw: "$dotw", hour: "$h", canton:"$canton" },
                     count: {$sum:1}
                 }
             }

@@ -34,7 +34,7 @@ app.get('/map', (req, res, next) => {
 
 app.get('/heatMap', (req, res, next) => {
     VisualizationController.getInstance()
-    .getActivityVisualizationInfo(String(req.query.canton)) // ! Si se decide no poner match hay que quitar
+    .getActivityVisualizationInfo()
     .then(result => {
         res.status(200).json(result);
     })
