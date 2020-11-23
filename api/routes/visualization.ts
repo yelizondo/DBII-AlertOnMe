@@ -29,11 +29,7 @@ app.get('/map', (req, res, next) => {
         res.status(500).json({
             message: 'Error in query execution'
         });
-    } else {
-        res.status(400).json({
-            message: "Invalid query"
-        });
-    }
+    });
 });
 
 app.get('/heatMap', (req, res, next) => {
