@@ -42,7 +42,6 @@ export class VisualizationController {
                         }
                     ).exec((error, findDocuments) => {
                         const lenght = findDocuments.length;
-                        console.log(lenght);
                         Intersection.findOneAndUpdate(
                             {longitude, latitude, canton},
                             { count: lenght },
