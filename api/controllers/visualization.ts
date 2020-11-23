@@ -59,19 +59,18 @@ export class VisualizationController {
         ])
     }
 
-    public getActivityVisualizationInfo(pCanton:string){
+    public getActivityVisualizationInfo(){
         return Location.aggregate([
-        // ? { $match: { name: pCanton } }, Decidir si se quieren todos
             {
                 $project: {
                     "h": {$hour: "$timestamp"},
                     "dotw" : true,
-                    "canton" : true // ! Si se decide que solo para uno hay que quitarlo
+                    "canton" : true
                 }
             },
             {
                 $group: {
-                    _id: {dotw: "$dotw", hour: "$h", canton:"$canton" }, // ! Si se decide que solo para uno hay que quitar canton
+                    _id: {dotw: "$dotw", hour: "$h", canton:"$canton" },
                     count: {$sum:1}
                 }
             }
