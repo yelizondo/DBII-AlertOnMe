@@ -1,0 +1,10 @@
+{
+    "ignore": [".git", "node_modules"],
+    "watch": ["./"],
+    "exec": "npm start",
+    "ext": "ts",
+    "env": {
+        "DB_NAME": "pruebas",
+        "DB_HOST": "127.0.0.1:5004"
+    }
+}
